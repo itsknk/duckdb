@@ -42,6 +42,7 @@
 #include "duckdb/storage/data_table.hpp"
 #include "duckdb/transaction/meta_transaction.hpp"
 #include "duckdb/transaction/transaction_manager.hpp"
+#include "dummy_extension_extension.hpp"
 
 namespace duckdb {
 
@@ -367,6 +368,7 @@ ClientContext::CreatePreparedStatementInternal(ClientContextLock &lock, const st
 	// now convert logical query plan into a physical query plan
 	PhysicalPlanGenerator physical_planner(*this);
 	auto physical_plan = physical_planner.CreatePlan(std::move(plan));
+	duckdb::InjectDummyOperator(physical_plan);
 	profiler.EndPhase();
 
 #ifdef DEBUG
